@@ -1,0 +1,12 @@
+248c248
+< 	  if (doing_heavy) then
+---
+> 	  if (doing_heavy .and.(.not. doing_bound)) then
+279c279
+< 	  else if (doing_deuterium) then
+---
+> 	  else if (doing_deuterium .or.(doing_heavy.and.doing_bound)) then
+341c341
+< 	if (doing_heavy) then
+---
+> 	if (doing_heavy .and.(.not. doing_bound)) then

@@ -1,0 +1,98 @@
+12a13
+> 	include 'g_dump_all_events.inc'
+37d37
+< 
+179a180,181
+> ! ******************************************************************
+> 
+201a204,212
+> ! When dumping all events, at least require that the generation step
+> ! is successful...
+> 
+>       if(dump_all_in_ntuple .and. success) then
+>         dump_all_this_ev = .true.
+>       else
+>         dump_all_this_ev = .false.
+>       endif
+> 
+209,210c220,221
+< 
+< 	  if (success) then
+---
+>       if (success .or. dump_all_this_ev) then
+> 	      temp_success = success
+211a223
+>         if (.not.temp_success .and. success) success = temp_success
+218c230,235
+< 	  if (success) call complete_main(.false.,main,vertex,vertex0,recon,success)
+---
+>       if (success .or. dump_all_this_ev) then
+>         temp_success = success
+>         call complete_main(.false.,main,vertex,vertex0,recon,success)
+>         if (.not.temp_success .and. success) success = temp_success
+>       endif
+> 
+325c342,343
+<      >		doing_pion,doing_kaon,doing_delta,doing_rho,contrib,slop)
+---
+>      >		doing_pion,doing_kaon,doing_delta,doing_rho,contrib,slop,
+>      >		doing_heavy, doing_bound)
+383c401
+< 	if (doing_heavy.or.doing_semi) then		!6-fold
+---
+> 	if ((doing_heavy.and.(.not.doing_bound)).or.doing_semi) then		!6-fold
+479c497,498
+< 	  write(7,*) 'Slit hor/vert         ',rSTOP_slit_vert,rSTOP_slit_hor
+---
+> 		write(7,*) 'Col (Sieve) entr/exit ',rSTOP_col_entr,rSTOP_col_exit
+> 		write(7,*) 'Spec. entrance        ',rSTOP_spec_entr
+486c505,507
+< 	  write(7,*) 'S1, S2, Cal	    ',rSTOP_s1,rSTOP_s2,rSTOP_cal
+---
+> 		write(7,*) 'S0, Cher, S2	    ',rSTOP_s0,rSTOP_cer,rSTOP_s2
+> 		write(7,*) 'Calo. Ps, Calo. Sh    ',rSTOP_ps,rSTOP_sh
+> 		write(7,*) 'Successes             ',rSTOP_successes
+491c512,513
+< 	  write(7,*) 'Slit hor/vert         ',lSTOP_slit_vert,lSTOP_slit_hor
+---
+> 		write(7,*) 'Col (Sieve) entr/exit  ',lSTOP_col_entr,lSTOP_col_exit
+> 		write(7,*) 'Spec. entrance         ',lSTOP_spec_entr
+498c520,523
+< 	  write(7,*) 'S1, S2, Cal	    ',lSTOP_s1,lSTOP_s2,lSTOP_cal
+---
+> 		write(7,*) 'S0, Cher, S2	     ',lSTOP_s0,lSTOP_cer,lSTOP_s2
+> 		write(7,*) 'Calo. prl1, Calo. prl2 ',lSTOP_prl1,lSTOP_prl2
+> 		write(7,*) 'Successes              ',lSTOP_successes
+> 		write(7,*)
+873c898
+< 	write(iun,'(5x,3(2x,a19,''='',l2)))') 'using_Eloss', using_Eloss,
+---
+> 	write(iun,'(5x,3(2x,a19,''='',l2))') 'using_Eloss', using_Eloss,
+875c900
+< 	write(iun,'(5x,3(2x,a19,''='',l2)))') 'correct_Eloss', correct_Eloss,
+---
+> 	write(iun,'(5x,3(2x,a19,''='',l2))') 'correct_Eloss', correct_Eloss,
+879c904,905
+<      >		'using_P_arm_montecarlo', using_P_arm_montecarlo
+---
+>      >		'using_P_arm_montecarlo', using_P_arm_montecarlo,
+>      >          'use_sf', use_sf
+883a910,911
+>         if (use_sf)
+>      >      write(iun,'(7x,a12,''='',f8.4)') 'transparency',transparency
+1469c1497
+<      >		ntup%resfac, fry, ok_P_arm, pathlen)
+---
+>      >		ntup%resfac, fry, ok_P_arm, pathlen, col_flag)
+1474c1502
+<      >		ntup%resfac, fry, ok_P_arm, pathlen)
+---
+>      >		ntup%resfac, fry, ok_P_arm, pathlen, col_flag)
+1684c1712
+<      >		tmpfact, fry, ok_E_arm, pathlen)
+---
+>      >		tmpfact, fry, ok_E_arm, pathlen, col_flag)
+1689c1717
+<      >		tmpfact, fry, ok_E_arm, pathlen)
+---
+>      >		tmpfact, fry, ok_E_arm, pathlen, col_flag)

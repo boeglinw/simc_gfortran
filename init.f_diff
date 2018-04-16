@@ -1,0 +1,98 @@
+157a158
+> 	
+296c297
+< 	if (doing_heavy) then		! 'reconstructed' Em cuts.
+---
+> 	if (doing_heavy .and. (.not.doing_bound)) then		! 'reconstructed' Em cuts.
+319c320
+< 
+---
+> ! -------------------------------------------------------------------------------------------
+325,326c326,328
+< 	else if (doing_deuterium) then
+< 	  VERTEXedge%Em%min = Mp + Mn - targ%M		!2.2249 MeV, I hope.
+---
+> ! -------------------------------------------------------------------------------------------
+> 	else if (doing_deuterium .or.(doing_heavy.and.doing_bound)) then
+> 	  VERTEXedge%Em%min = Mp + Mn - targ%M		!2.2249 MeV, if deuterium, I hope.
+330c332,333
+< 	else if (doing_heavy) then
+---
+> ! -------------------------------------------------------------------------------------------
+> 	else if (doing_heavy .and.(.not.doing_bound)) then
+338a342
+> ! -------------------------------------------------------------------------------------------
+359d362
+< 	   
+362c365
+< 
+---
+> ! -------------------------------------------------------------------------------------------
+409c412
+< 	if (doing_heavy) then
+---
+> 	if (doing_heavy .and. (.not.doing_bound)) then
+422c425
+< 	if (doing_heavy) then	!Needed Egamma_tot_max for final limits.
+---
+> 	if (doing_heavy.and. (.not.doing_bound)) then	!Needed Egamma_tot_max for final limits.
+437c440
+< 	else if (doing_heavy) then	!generated TOTAL (e+p) energy limits.
+---
+> 	else if (doing_heavy.and.(.not. doing_bound)) then	!generated TOTAL (e+p) energy limits.
+465a469
+> ! ****************************************************************************************
+468c472
+< 
+---
+> ! ----------------------------------------------------------------------------
+471a476
+> ! ----------------------------------------------------------------------------
+473c478,479
+<      >      .or. doing_rho .or. doing_delta) then
+---
+>      >      .or. doing_rho .or. doing_delta
+>      >      .or. (doing_heavy.and.doing_bound)) then
+476c482,483
+< 	else if (doing_heavy .or. doing_semi) then
+---
+> ! ----------------------------------------------------------------------------
+> 	else if ((doing_heavy.and.(.not.doing_bound)) .or. doing_semi) then
+479a487
+> ! ****************************************************************************************
+491a500
+> ! ****************************************************************************************
+494c503
+< 
+---
+> ! ----------------------------------------------------------------------------
+496c505,506
+<      >    doing_rho .or. doing_delta) then
+---
+>      >    doing_rho .or. doing_delta
+>      >    .or. (doing_heavy.and.doing_bound)) then
+499c509,510
+< 	else if (doing_heavy .or. doing_semi)then
+---
+> ! ----------------------------------------------------------------------------
+> 	else if ((doing_heavy.and.(.not.doing_bound)) .or. doing_semi)then
+502a514,515
+> ! ****************************************************************************************
+> 
+861a875,884
+> 
+> !---------------------------------------------------------------------
+> 	! RCT 8/5/2016 This simc version uses a Spectral Function for
+> 	! 3He implemented by Werner and myself. This part of the code
+> 	! uses c12.theory just to set the Pmiss range
+> 	else if ( nint(targ%A) .eq. 3) then
+> 	  write(6,*) 'Defaulting to c12.theory to set Pmiss range'
+> 	  theory_file='c12.theory'
+> !---------------------------------------------------------------------
+> 
+866a890
+> 
+871a896
+> 
+937a963
+> 

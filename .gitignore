@@ -1,0 +1,19 @@
+# ignore patterns
+#
+# if you add new things you need to reset the tracking
+# make sure everything is committed
+#
+# git rm -r --cached .
+# git add .
+# git commit -m ".gitignore has been modified"
+# 
+#
+*~
+# Objects and executable
+*.o
+*.d
+*.root
+simc
+fmake_tree
+make_tree
+.DS_Store

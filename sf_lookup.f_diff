@@ -1,0 +1,174 @@
+6c6
+< ! <Pmvalue> <Emvalue> <SF_PROB_p> <SF_PROB_n>  <dPm> <dEm>
+---
+> ! <Pmvalue> <Emvalue> <SF_PROB> <dPm> <dEm>
+22c22
+< 	logical protonflag
+---
+> 	logical protonflag, doing_bound	
+27a28,29
+> ! *************************************************************
+> ! Loop over the SF file to get all the values
+59a62
+> 
+62d64
+< ! all EmPm bin read, calculate normalization
+68d69
+< 	    ! integrate over Em
+72c73
+< !	  write(6,*) 'Pm=',Pmval(iPm),' has normalization=',sfnorm(iPm)
+---
+> 
+74c75,76
+< 	write(6,*) 'Uncorrected S.F. has normalization=',sftotnorm
+---
+> 	write(6,*) '------------------------------------------------------'
+> 	write(6,*) 'sf_lookup: Uncorrected S.F. has normalization = ',sftotnorm
+78a81,83
+> 	    sfval(iEm,iPm) = sfval(iEm,iPm) /4./3.1415926535
+> 	    sfval(iEm,iPm) = sfval(iEm,iPm) /(Pmval(iPm)*Pmval(iPm))
+> 	    sfval(iEm,iPm) = sfval(iEm,iPm) /dPm(iPm)/dEm(iEm)
+81c86,87
+< 
+---
+> 	write(6,*) 'sf_lookup: Uncorrected S.F. has been normalized to 1'
+> 	write(6,*) '------------------------------------------------------'
+85d90
+< 
+86a92,93
+> ! RCT 8/2/2016 This is the subroutine used to get the weighing
+> ! for (for example) 3-Helium
+88c95,114
+< 	subroutine sf_lookup(Em,Pm,SF)
+---
+>         subroutine sf_lookup_diff(Em,Pm,SFd, doing_bound)
+> ! Get value of fully differential spectral function at Em, Pm.
+>         implicit none
+>         real*8 Em, Pm
+>         real*8 SFd
+> 	logical doing_bound
+> 
+>         real*8 SF
+>         call sf_lookup(Em, Pm, SF,doing_bound)
+>         !SFd = SF/4/3.1415926535/(Pm*Pm)/5.0/20.0
+> 	! RCT 8/4/2016 in the line above we were dividing by 4*Pi,
+> 	!Pm**2, dPm, and dEm. This process is done now right when we
+> 	!import the spectral function. Furthermore, dEm and dPm are
+> 	!not assumed to be constant (5.0 and 20.0 above)
+>         SFd = SF
+> 	return
+>         end
+> 
+> !#######################################################################################
+> 	subroutine sf_lookup(Em,Pm,SF,doing_bound)
+98d123
+< 
+104a130
+> 	logical doing_bound
+105a132
+> ! --------------------------------------------------------------
+106a134,138
+> ! ----------------------------------------------
+> ! If Pm is greater than the greatest value of Pm in the SF file
+> ! *** w1 is the weight from the right. Similarly,
+> ! *** w2 is the weight from the left.
+> 
+110a143,144
+> ! --------------------------------------------------------------
+> ! If Pm is smaller than the smallest value of Pm in the SF file
+114a149,150
+> ! --------------------------------------------------------------
+> ! If Pm lies somewhere in the middle of Pm values in the SF file
+116d151
+< 
+128,141d162
+< !	write(6,*) 'Pm,iPm,Pm,w1,w2=',Pm,iPm,Pmval(iPm),w1,w2
+< 
+< !	  do ind=1,numPm
+< !	    if (Pm.gt.Pmval(ind)) then
+< !	      iPm=ind			!ind, or ind-1 ???
+< !	      w2=(Pm-Pmval(iPm))/(Pmval(iPm+1)-Pmval(iPm))
+< !	      w1=(Pmval(iPm+1)-Pm)/(Pmval(iPm+1)-Pmval(iPm))
+< !	      if (abs(w1*Pmval(iPm)+w2*Pmval(iPm+1)-Pm).gt.0.0001) then
+< !	        write(6,*) 'w1,w2,Pm,Pmval(iPm)=',w1,w2,Pm,Pmval(iPm)
+< !	        stop
+< !	      endif
+< !	write(6,*) 'Pm,iPm,Pm,w1,w2=',Pm,iPm,Pmval(iPm),w1,w2
+< !	    endif
+< !	  enddo
+143a165
+> ! --------------------------------------------------------------
+149,153c171,178
+< 	if (Em.le.Emval(1)) then	!linear extrapolation of LOG(f(Em)).
+< 	  Em1=Emval(1)
+< 	  Em2=Emval(2)
+< 	  sf1=w1*sfval(1,iPm)+w2*sfval(1,iPm+1)
+< 	  sf2=w1*sfval(2,iPm)+w2*sfval(2,iPm+1)
+---
+> ! --------------------------------------------------------------
+> ! RCT 8/2/2016 Only take values that are above the 3-body break up threshold
+> ! The first E miss bin represents the 2-body break up threshold. Therefore, if not
+> ! doing bound should ignore anything at or below the first bin in E miss.
+> 
+> ! -----------------------------------------------------
+> ! RCT 8/4/2016 This corresponds to the 3-body break up
+> 	if (.not.doing_bound) then
+155c180
+< 	else if (Em.gt.Emval(numEm)) then	!linear extrapolation of LOG(f(Em))
+---
+> 	  if (Em.gt.Emval(numEm)) then	!linear extrapolation of LOG(f(Em))
+160c185,187
+< 
+---
+> 	  else if ((Em.lt.Emval(2))) then   !The first bin represents 2-body breakup!
+> 	    SF=0
+> 	    return
+162c189
+< 	  do iEm=1,numEm-1
+---
+> 	    do iEm=2,numEm-1
+166,168c193,194
+< 	      sf1=w1*sfval(iEm,iPm)+w2*sfval(iEm,iPm+1)
+< 	      sf2=w1*sfval(iEm+1,iPm)+w2*sfval(iEm+1,iPm+1)
+< !	write(6,*) 'iEm,w1,w2=',iEm,w1,w2
+---
+> 	        sf1 = w1*sfval(  iEm,iPm) + w2*sfval(  iEm,iPm+1)
+> 	        sf2 = w1*sfval(iEm+1,iPm) + w2*sfval(iEm+1,iPm+1)
+173a200
+> 	  
+174a202
+> 	  if (SF.lt.1.d-20) SF=0 !If the obtained value is extremely small, just return zero!
+176c204,214
+< 	if (SF.lt.1.d-20) SF=0
+---
+> ! -----------------------------------------------------
+> ! RCT 8/4/2016 This corresponds to the 2-body break up
+> 	else if (doing_bound) then
+> 	! Return the value corresponding to the first bin!
+> 	  if(w1.ge.w2) then
+> 	    SF = sfval(1,iPm) 
+> 	  else if (w1.lt.w2) then
+> 	    SF = sfval(1,iPm+1)
+> 	  endif
+> 	  if (SF.lt.1.d-20) SF=0 !If the obtained value is extremely small, just return zero!
+> 	endif
+182c220
+< !----------------------------------------------------------------------
+---
+> !#######################################################################################
+184c222
+< 	subroutine generate_em(Pm,Em)
+---
+> 	subroutine generate_em(Pm,Em, doing_bound)
+201c239
+< 
+---
+> 	logical doing_bound
+207c245
+< 	call sf_lookup(x(1),Pm,y(1))
+---
+> 	call sf_lookup(x(1),Pm,y(1),doing_bound)
+211c249
+< 	  call sf_lookup(x(iEm),Pm,y(iEm))
+---
+> 	  call sf_lookup(x(iEm),Pm,y(iEm),doing_bound)
