@@ -7,7 +7,7 @@ ROOTGLIBS    := $(shell root-config --glibs)
 # Linux with egcs, gcc 2.9x, gcc 3.x (>= RedHat 5.2)
 CXX           := $(shell root-config --cxx)
 CXXFLAGS      = -O -Wall -fPIC -I$(ROOTSYS)/include
-LD            := $(shell root-config --ld)  -Wl,-rpath,$(ROOTSYS)/lib
+LD            := $(shell root-config --ld)
 LDFLAGS       = -O
 SOFLAGS       = -shared
 #

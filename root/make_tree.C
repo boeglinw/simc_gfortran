@@ -6,10 +6,11 @@
 #include <iostream>
 #include <fstream>
 
-#include <TROOT.h>
-#include <TFile.h>
-#include <TString.h>
-#include <TTree.h>
+
+#include "TROOT.h"
+#include "TFile.h"
+#include "TString.h"
+#include "TTree.h"
 
 using namespace std;
 
@@ -22,20 +23,19 @@ int main()
 
   TString NTtitle; // NT title
   TString NTname ; // NT name
-  
+
   Int_t Ntags;  // number of tags
 
   Int_t i;
-  
 
   // Tree variables and branch names
-  Float_t val[100];
-  Float_t Normfac;
+  Double_t val[100];
+  Double_t Normfac;
   
   TString tag_name[100]; // tag names
   TString var_branch[100]; // branch name string
   TString var_name[100]; 
-  TString var_type("/F"); // all variables of the same type
+  TString var_type("/D"); // all variables of the same type
 
   // read file
   // header information
@@ -89,13 +89,14 @@ int main()
   // read the values and fill the tree
 
   Int_t n = 0;
-  while(! cin.eof() ){         // loop until eof
+  while(!cin.fail()){         // loop until eof
     n++;
 
     if (n%1000 == 0) cout << "Event : " << n << endl;
 
     for (i=0; i<Ntags; i++) {  // read the data for each event
-      cin >> val[i];          
+       cin >> val[i];
+       // cout << " n = " << n << ", tag_name = " << tag_name[i] << ",  value = " << val[i] << endl;
                               
     }
     // fill the tree's branches

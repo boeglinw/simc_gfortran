@@ -15,9 +15,11 @@ ln -s $SIMCDIR/python
 ln -s $SIMCDIR/root
 
 # links to physics data files
-# deuteron
 for i in $SIMCDIR/*.dat;do ln -s $i; done
+# deuteron
 ln -s $SIMCDIR/h2.theory
+# generic C12
+ln -s $SIMCDIR/c12.theory
 
 
 # link to the executable

@@ -3,6 +3,8 @@
 //
 // reads the data from a default file name
 // read data ntuple from stdin
+// assumes that normac is in a file called :         normfact.data
+// assumes that the event data are in a file called: ./worksim/current.data
 
 #include <iostream>
 #include <fstream>
