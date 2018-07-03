@@ -1,6 +1,6 @@
 # setup directory to run simc
 # where simc is located, edit this to fit your installation
-SIMCDIR=/data/boeglin.1/HallC/GitHub/deut_simc/
+SIMCDIR=/data/boeglin.1/HallC/GitHub/simc_gfortran/
 
 # where the laget directory resides
 # edit this if you need them 

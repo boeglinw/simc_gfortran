@@ -141,6 +141,10 @@ C Read in transport coefficients.
 	     h_exit = 3.340	!0.1mm wider than 'electron arm'
 	     v_exit = 6.485
 	  endif
+
+	  print *, 'HRSR: collimator core ', collimator
+	  print *, ' use_open = ', use_open
+	  print *, ' use_sieve = ', use_sieve 
 	  
         endif	
 	

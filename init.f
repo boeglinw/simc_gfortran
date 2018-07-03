@@ -871,6 +871,8 @@ c	exponentiate = use_expon
 	   endif
 	   ! this is redundant for the laget model and is the default model
 	   theory_file='h2.theory'
+	else if ( nint(targ%A) .eq. 3) then
+	  theory_file='3He.theory'
 	else if ( nint(targ%A) .eq. 12) then
 	  theory_file='c12.theory'
 	else if ( nint(targ%A) .eq. 56) then

@@ -139,6 +139,10 @@ C Read in transport coefficients.
 	     h_exit = 3.335	!0.1mm narrower than 'hadron arm'.
 	     v_exit = 6.485
 	  endif
+
+	  print *, 'HRSL: collimator core ', collimator
+	  print *, ' use_open = ', use_open
+	  print *, ' use_sieve = ', use_sieve 
 	  
 	endif
 	
